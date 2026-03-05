@@ -1,0 +1,95 @@
+{
+  "projectType": "saas",
+  "projectName": "MediGuide",
+  "projectDescription": "A comprehensive health monitoring platform that provides personalized medical guidance based on user biometric data.",
+  "theme": "almond",
+  "primaryColor": "#f1d262",
+  "lightColor": "#7c6c34",
+  "darkColor": "#19160b",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "quickstart"
+            ]
+          },
+          {
+            "group": "Features",
+            "pages": [
+              "features/authentication",
+              "features/medical-tracking",
+              "features/health-analysis",
+              "features/personalized-plans"
+            ]
+          },
+          {
+            "group": "User Guides",
+            "pages": [
+              "guides/creating-account",
+              "guides/entering-medical-data",
+              "guides/understanding-results",
+              "guides/password-recovery"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "api/overview",
+              "api/authentication"
+            ]
+          },
+          {
+            "group": "User Management",
+            "pages": [
+              "api/users/signup",
+              "api/users/login",
+              "api/users/forgot-password",
+              "api/users/verify-reset-code",
+              "api/users/reset-password"
+            ]
+          },
+          {
+            "group": "Medical Records",
+            "pages": [
+              "api/medical-info/create",
+              "api/medical-info/get-latest"
+            ]
+          },
+          {
+            "group": "System",
+            "pages": [
+              "api/health-check"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "User authentication with secure password management",
+    "Comprehensive medical data tracking (11 biometric parameters)",
+    "Real-time health risk assessment and symptom detection",
+    "Personalized health plans with actionable recommendations",
+    "Medical record history and retrieval"
+  ],
+  "publicApiSurface": [
+    "POST /api/users/signup",
+    "POST /api/users/login",
+    "POST /api/users/forgot-password",
+    "POST /api/users/verify-reset-code",
+    "POST /api/users/reset-password",
+    "POST /api/medical-info",
+    "GET /api/medical-info/latest",
+    "GET /api/health"
+  ]
+}
