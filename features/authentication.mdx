@@ -1,0 +1,471 @@
+---
+title: 'Authentication System'
+description: 'User authentication with signup, login, and password reset functionality'
+icon: 'lock'
+---
+
+## Overview
+
+MediGuide provides a comprehensive authentication system that handles user registration, login, and password recovery. The system stores user credentials securely and maintains session state using localStorage.
+
+## User Registration (Signup)
+
+### API Endpoint
+
+```javascript
+POST /api/users/signup
+Content-Type: application/json
+```
+
+### Request Body
+
+```json
+{
+  "username": "string",
+  "email": "string",
+  "password": "string"
+}
+```
+
+### Email Validation
+
+The system validates email format using a regex pattern:
+
+```javascript
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+if (!emailRegex.test(formData.email)) {
+  setMessage('Por favor ingresa un correo electrónico válido');
+  return;
+}
+```
+
+### Password Confirmation
+
+During signup, users must confirm their password. The system validates that both passwords match:
+
+```javascript
+if (formData.password !== formData.confirmPassword) {
+  setMessage('Las contraseñas no coinciden');
+  return;
+}
+```
+
+### Form Fields
+
+<CodeGroup>
+
+```javascript Username Field
+<input
+  type='text'
+  name='username'
+  value={formData.username}
+  onChange={handleChange}
+  required
+  placeholder='Ingresa tu nombre de usuario'
+/>
+```
+
+```javascript Email Field
+<input
+  type='email'
+  name='email'
+  value={formData.email}
+  onChange={handleChange}
+  required
+  placeholder='Ingresa tu correo electrónico'
+/>
+```
+
+```javascript Password Field
+<input
+  type={showPassword ? 'text' : 'password'}
+  name='password'
+  value={formData.password}
+  onChange={handleChange}
+  required
+  placeholder='Ingresa tu contraseña'
+/>
+```
+
+```javascript Confirm Password Field
+<input
+  type={showConfirmPassword ? 'text' : 'password'}
+  name='confirmPassword'
+  value={formData.confirmPassword}
+  onChange={handleChange}
+  required
+  placeholder='Confirma tu contraseña'
+/>
+```
+
+</CodeGroup>
+
+### Success Response
+
+```json
+{
+  "message": "User registered successfully",
+  "userId": 123,
+  "username": "johndoe"
+}
+```
+
+### Error Responses
+
+<AccordionGroup>
+
+<Accordion title="Duplicate User/Email (400)">
+```json
+{
+  "error": "Usuario ya está registrado"
+}
+// or
+{
+  "error": "Correo ya está registrado"
+}
+```
+</Accordion>
+
+<Accordion title="Invalid Email Format (Client-side)">
+```
+Message: "Por favor ingresa un correo electrónico válido"
+```
+</Accordion>
+
+<Accordion title="Password Mismatch (Client-side)">
+```
+Message: "Las contraseñas no coinciden"
+```
+</Accordion>
+
+</AccordionGroup>
+
+### Client-Side Implementation
+
+```javascript
+const response = await fetch(`${apiUrl}/api/users/signup`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    username: formData.username,
+    email: formData.email,
+    password: formData.password
+  })
+});
+
+const data = await response.json();
+
+if (response.ok) {
+  localStorage.setItem('userId', data.userId);
+  localStorage.setItem('username', data.username);
+  // Redirect to main app
+  onAuthSuccess();
+}
+```
+
+## User Login
+
+### API Endpoint
+
+```javascript
+POST /api/users/login
+Content-Type: application/json
+```
+
+### Request Body
+
+```json
+{
+  "username": "string",
+  "password": "string"
+}
+```
+
+### Login Implementation
+
+```javascript
+const response = await fetch(`${apiUrl}/api/users/login`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    username: formData.username,
+    password: formData.password
+  })
+});
+
+const data = await response.json();
+
+if (response.ok) {
+  localStorage.setItem('userId', data.userId);
+  localStorage.setItem('username', data.username);
+  onAuthSuccess();
+}
+```
+
+### Success Response
+
+```json
+{
+  "message": "Login successful",
+  "userId": 123,
+  "username": "johndoe"
+}
+```
+
+### Error Response
+
+```json
+{
+  "error": "Usuario o contraseña incorrectos"
+}
+```
+
+## Password Reset Flow
+
+The password reset process involves three steps:
+
+### Step 1: Request Reset Code
+
+**Endpoint:** `POST /api/users/forgot-password`
+
+```json Request
+{
+  "email": "user@example.com"
+}
+```
+
+```json Response
+{
+  "message": "Reset code sent to email",
+  "resetCode": "123456"
+}
+```
+
+<Note>
+The reset code is a 6-digit numeric code that expires after 30 minutes.
+</Note>
+
+### Step 2: Verify Reset Code
+
+**Endpoint:** `POST /api/users/verify-reset-code`
+
+```json Request
+{
+  "email": "user@example.com",
+  "resetCode": "123456"
+}
+```
+
+```json Response
+{
+  "message": "Reset code verified",
+  "userId": 123
+}
+```
+
+**Error Responses:**
+
+<CodeGroup>
+
+```json Invalid Code
+{
+  "error": "Código de recuperación inválido"
+}
+```
+
+```json Expired Code
+{
+  "error": "El código de recuperación ha expirado"
+}
+```
+
+</CodeGroup>
+
+### Step 3: Reset Password
+
+**Endpoint:** `POST /api/users/reset-password`
+
+```json Request
+{
+  "email": "user@example.com",
+  "resetCode": "123456",
+  "newPassword": "newSecurePassword123"
+}
+```
+
+```json Response
+{
+  "message": "Contraseña actualizada exitosamente",
+  "userId": 123,
+  "username": "johndoe"
+}
+```
+
+<Warning>
+Passwords must be at least 6 characters long. Shorter passwords will be rejected with a 400 error.
+</Warning>
+
+## Security Features
+
+### Password Visibility Toggle
+
+Both password fields include show/hide functionality:
+
+```javascript
+const [showPassword, setShowPassword] = useState(false);
+const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+// Toggle button implementation
+<button
+  type='button'
+  onClick={() => setShowPassword(!showPassword)}
+>
+  {showPassword ? 'Ocultar' : 'Mostrar'}
+</button>
+```
+
+### Session Management
+
+User sessions are maintained using localStorage:
+
+```javascript
+// Store user session
+localStorage.setItem('userId', data.userId);
+localStorage.setItem('username', data.username);
+
+// Retrieve current user
+const userId = localStorage.getItem('userId');
+const username = localStorage.getItem('username');
+```
+
+### Database Schema
+
+```sql
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  username VARCHAR UNIQUE NOT NULL,
+  email VARCHAR UNIQUE NOT NULL,
+  password VARCHAR NOT NULL,
+  reset_code VARCHAR,
+  reset_code_expiry TIMESTAMP,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+## Form State Management
+
+The authentication form uses React state to manage user input:
+
+```javascript
+const [formData, setFormData] = useState({
+  username: '',
+  email: '',
+  password: '',
+  confirmPassword: ''
+});
+
+const handleChange = (e) => {
+  const { name, value } = e.target;
+  setFormData(prev => ({
+    ...prev,
+    [name]: value
+  }));
+};
+```
+
+## Loading States
+
+The system provides visual feedback during API calls:
+
+```javascript
+const [loading, setLoading] = useState(false);
+
+// During form submission
+setLoading(true);
+
+// Button disabled during loading
+<button
+  type='submit'
+  disabled={loading}
+  style={{
+    backgroundColor: loading ? '#ccc' : '#0066cc'
+  }}
+>
+  {loading ? 'Cargando...' : (isLogin ? 'Iniciar Sesión' : 'Registrarse')}
+</button>
+```
+
+## Error Handling
+
+Comprehensive error handling with user-friendly messages:
+
+```javascript
+try {
+  const response = await fetch(apiUrl, options);
+  const data = await response.json();
+  
+  if (response.ok) {
+    setMessage('¡Cuenta creada exitosamente!');
+  } else {
+    setMessage(`Error: ${data.error}`);
+  }
+} catch (error) {
+  setMessage(`Error de conexión: ${error.message}`);
+}
+```
+
+## UI Components
+
+### Mode Toggle
+
+Switch between login and signup modes:
+
+```javascript
+const [isLogin, setIsLogin] = useState(true);
+
+const toggleMode = () => {
+  setIsLogin(!isLogin);
+  setFormData({
+    username: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
+  });
+  setMessage('');
+};
+```
+
+### Message Display
+
+Dynamic message styling based on success/error:
+
+```javascript
+{message && (
+  <p style={{
+    color: (message.includes('Error') || 
+            message.includes('no coinciden') || 
+            message.includes('válido')) ? '#d32f2f' : '#4CAF50',
+    backgroundColor: (message.includes('Error') || 
+                     message.includes('no coinciden') || 
+                     message.includes('válido')) ? '#ffebee' : '#e8f5e9'
+  }}>
+    {message}
+  </p>
+)}
+```
+
+## API Base URL
+
+The authentication system connects to the backend API:
+
+```javascript
+const apiUrl = 'http://localhost:3001';
+```
+
+<Info>
+Ensure the backend server is running on port 3001 before attempting authentication operations.
+</Info>

@@ -1,0 +1,163 @@
+---
+title: Creating Your MediGuide Account
+description: Step-by-step guide to creating a new account on the MediGuide platform
+---
+
+Welcome to MediGuide! This guide will walk you through creating your account and getting started with personalized health monitoring.
+
+## Overview
+
+MediGuide offers personalized health guidance based on your biometric data. Creating an account is quick and secure, requiring just three pieces of information.
+
+## Account Creation Process
+
+<Steps>
+  <Step title="Navigate to the Signup Page">
+    When you first open MediGuide, you'll see the authentication page with two toggle buttons at the top:
+    - **Iniciar Sesión** (Login)
+    - **Registrarse** (Sign Up)
+    
+    Click on the **Registrarse** button to switch to the signup form.
+  </Step>
+
+  <Step title="Enter Your Username">
+    In the **Nombre de Usuario** (Username) field, enter your desired username.
+    
+    **Requirements:**
+    - Must be unique (not already in use by another user)
+    - Required field - cannot be left empty
+    
+    The system will check for duplicate usernames when you submit the form.
+  </Step>
+
+  <Step title="Provide Your Email Address">
+    In the **Correo Electrónico** (Email) field, enter your valid email address.
+    
+    **Requirements:**
+    - Must be a valid email format (e.g., user@example.com)
+    - Must be unique (not already registered)
+    - This email will be used for password recovery
+    
+    The system validates email format using standard email regex pattern.
+  </Step>
+
+  <Step title="Create a Secure Password">
+    In the **Contraseña** (Password) field, create your password.
+    
+    **Features:**
+    - Use the **Mostrar/Ocultar** (Show/Hide) button to toggle password visibility
+    - Required field
+    
+    **Best Practices:**
+    - Use a strong, unique password
+    - Include a mix of letters, numbers, and special characters
+    - Avoid common words or personal information
+  </Step>
+
+  <Step title="Confirm Your Password">
+    In the **Confirmar Contraseña** (Confirm Password) field, re-enter your password exactly as you typed it above.
+    
+    **Validation:**
+    - Both passwords must match exactly
+    - The system will display an error message "Las contraseñas no coinciden" if they don't match
+    - You can use the **Mostrar/Ocultar** button to verify your entry
+  </Step>
+
+  <Step title="Submit Your Registration">
+    Click the **Registrarse** button to create your account.
+    
+    **What Happens Next:**
+    - The button text changes to "Cargando..." (Loading) while processing
+    - If successful, you'll see "¡Cuenta creada exitosamente! Iniciando sesión..."
+    - You'll be automatically logged in and redirected to the main dashboard
+    - Your user ID and username are stored locally for the session
+  </Step>
+</Steps>
+
+## Validation and Error Messages
+
+The signup form performs several validation checks:
+
+### Email Validation
+- **Invalid format:** "Por favor ingresa un correo electrónico válido"
+- **Already registered:** "Error: Correo ya está registrado"
+
+### Username Validation
+- **Already taken:** "Error: Usuario ya está registrado"
+
+### Password Validation
+- **Passwords don't match:** "Las contraseñas no coinciden"
+
+### Connection Errors
+- **Server not responding:** "Error: Servidor no respondió"
+- **Network issues:** "Error de conexión: [error details]"
+
+## After Account Creation
+
+Once your account is successfully created:
+
+1. **Automatic Login**: You're automatically logged into your new account
+2. **Session Storage**: Your credentials are securely stored for the session
+3. **Dashboard Access**: You're redirected to the main application interface
+4. **Ready to Use**: You can immediately start entering medical data
+
+<CardGroup cols={2}>
+  <Card title="Enter Medical Data" icon="heart-pulse" href="/guides/entering-medical-data">
+    Learn how to input your health metrics and biometric data
+  </Card>
+  
+  <Card title="Password Recovery" icon="key" href="/guides/password-recovery">
+    Set up password recovery options for account security
+  </Card>
+</CardGroup>
+
+## UI Components Reference
+
+The signup interface includes:
+
+- **Authentication Toggle**: Switch between Login and Signup modes
+- **Form Fields**: Username, Email, Password, and Confirm Password inputs
+- **Show/Hide Buttons**: Toggle password visibility for both password fields
+- **Submit Button**: Processes your registration with loading state
+- **Message Display**: Shows success/error messages with color coding
+- **MediGuide Logo**: Platform branding at the top of the form
+
+## Technical Details
+
+The account creation process:
+- Communicates with `/api/users/signup` endpoint
+- Stores user data securely in the database
+- Returns userId and username upon success
+- Implements client-side validation before server submission
+- Uses localStorage for session management
+
+<Note>
+  Your password is transmitted securely, but make sure you're accessing MediGuide through a secure connection.
+</Note>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Registration button is disabled">
+    The button becomes disabled during submission to prevent duplicate requests. Wait for the current request to complete.
+  </Accordion>
+  
+  <Accordion title="Email already registered error">
+    If you see this error, you may already have an account. Try logging in instead, or use the password recovery feature if you've forgotten your credentials.
+  </Accordion>
+  
+  <Accordion title="Form fields are reset unexpectedly">
+    Fields are cleared when you toggle between Login and Signup modes. Make sure you're on the Signup tab before entering your information.
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+After creating your account, you're ready to:
+
+1. Complete your health profile by entering medical data
+2. Receive personalized health insights and recommendations
+3. Track your health metrics over time
+4. Access your health plans and symptom analysis
+
+<Check>Congratulations! Your MediGuide account is now active and ready to help you monitor your health.</Check>

@@ -1,80 +1,351 @@
 ---
-title: "Quickstart"
-description: "Start building awesome documentation in minutes"
+title: Quick Start Guide
+description: Get from signup to your first health check in 5 minutes with MediGuide
 ---
 
-## Get started in three steps
+## Get Your First Health Check in 5 Minutes
 
-Get your documentation site running locally and make your first customization.
-
-### Step 1: Set up your local environment
-
-<AccordionGroup>
-  <Accordion icon="copy" title="Clone your docs locally">
-    During the onboarding process, you created a GitHub repository with your docs content if you didn't already have one. You can find a link to this repository in your [dashboard](https://dashboard.mintlify.com).
-    
-    To clone the repository locally so that you can make and preview changes to your docs, follow the [Cloning a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) guide in the GitHub docs.
-  </Accordion>
-  <Accordion icon="rectangle-terminal" title="Start the preview server">
-    1. Install the Mintlify CLI: `npm i -g mint`
-    2. Navigate to your docs directory and run: `mint dev`
-    3. Open `http://localhost:3000` to see your docs live!
-    
-    <Tip>Your preview updates automatically as you edit files.</Tip>
-  </Accordion>
-</AccordionGroup>
-
-### Step 2: Deploy your changes
-
-<AccordionGroup>
-  <Accordion icon="github" title="Install our GitHub app">
-    Install the Mintlify GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app).
-    
-    Our GitHub app automatically deploys your changes to your docs site, so you don't need to manage deployments yourself.
-</Accordion>
-<Accordion icon="palette" title="Update your site name and colors">
-    For a first change, let's update the name and colors of your docs site.
-
-    1. Open `docs.json` in your editor.
-    2. Change the `"name"` field to your project name.
-    3. Update the `"colors"` to match your brand.
-    4. Save and see your changes instantly at `http://localhost:3000`.
-
-    <Tip>Try changing the primary color to see an immediate difference!</Tip>
-  </Accordion>
-</AccordionGroup>
-
-### Step 3: Go live
-
-<Accordion icon="rocket" title="Publish your docs">
-  1. Commit and push your changes.
-  2. Your docs will update and be live in moments!
-</Accordion>
-
-## Next steps
-
-Now that you have your docs running, explore these key features:
-
-<CardGroup cols={2}>
-
-<Card title="Write Content" icon="pen-to-square" href="/essentials/markdown">
-  Learn MDX syntax and start writing your documentation.
-</Card>
-
-<Card title="Customize style" icon="palette" href="/essentials/settings">
-  Make your docs match your brand perfectly.
-</Card>
-
-<Card title="Add code examples" icon="square-code" href="/essentials/code">
-  Include syntax-highlighted code blocks.
-</Card>
-
-<Card title="API documentation" icon="code" href="/api-reference/introduction">
-  Auto-generate API docs from OpenAPI specs.
-</Card>
-
-</CardGroup>
+This guide will walk you through creating an account, logging in, and completing your first comprehensive health check on MediGuide.
 
 <Note>
-  **Need help?** See our [full documentation](https://mintlify.com/docs) or join our [community](https://mintlify.com/community).
+  Before you begin, ensure the MediGuide server is running on `http://localhost:3001`
 </Note>
+
+## Step 1: Create Your Account
+
+Start by registering a new account on the MediGuide platform.
+
+<Steps>
+  <Step title="Navigate to the signup page">
+    Open MediGuide in your browser. You'll see the authentication screen with two tabs: **Iniciar Sesión** (Login) and **Registrarse** (Sign Up).
+  </Step>
+  
+  <Step title="Click the Registrarse tab">
+    Switch to the registration form by clicking the **Registrarse** button.
+  </Step>
+  
+  <Step title="Fill in your details">
+    Complete the signup form with the following required fields:
+    
+    - **Nombre de Usuario** (Username) - Your unique username
+    - **Correo Electrónico** (Email) - A valid email address
+    - **Contraseña** (Password) - Your secure password
+    - **Confirmar Contraseña** (Confirm Password) - Re-enter your password
+    
+    <Tip>
+      Use the **Mostrar** (Show) buttons next to password fields to verify you've typed them correctly.
+    </Tip>
+  </Step>
+  
+  <Step title="Submit the form">
+    Click the **Registrarse** button to create your account. If successful, you'll see a confirmation message and be automatically logged in.
+  </Step>
+</Steps>
+
+### Signup API Call
+
+When you submit the form, MediGuide sends the following request:
+
+```javascript
+const response = await fetch('http://localhost:3001/api/users/signup', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    username: 'your_username',
+    email: 'your_email@example.com',
+    password: 'your_password'
+  })
+});
+```
+
+<Info>
+  Your password must match in both fields, and your email must be in a valid format (e.g., `user@example.com`).
+</Info>
+
+## Step 2: Log In (If Needed)
+
+If you already have an account or were logged out, you can sign back in.
+
+<Steps>
+  <Step title="Click Iniciar Sesión">
+    On the authentication screen, ensure the **Iniciar Sesión** tab is selected.
+  </Step>
+  
+  <Step title="Enter your credentials">
+    Fill in your:
+    - **Nombre de Usuario** (Username)
+    - **Contraseña** (Password)
+  </Step>
+  
+  <Step title="Sign in">
+    Click **Iniciar Sesión** to access your account. Your user ID and username are stored in browser localStorage for future sessions.
+  </Step>
+</Steps>
+
+### Login API Call
+
+```javascript
+const response = await fetch('http://localhost:3001/api/users/login', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    username: 'your_username',
+    password: 'your_password'
+  })
+});
+```
+
+<Warning>
+  If you forget your password, click **¿Olvidaste tu contraseña?** to start the password recovery process.
+</Warning>
+
+## Step 3: Enter Your Medical Data
+
+Once logged in, you'll see the main MediGuide dashboard with the health check form.
+
+<Steps>
+  <Step title="Locate the medical check form">
+    Scroll to the **CHEQUEO MEDICO** section with the heading "MEDIGUIDE OFRECE GUIAS MEDICAS EN BASE A LA SALUD DE NUESTROS USUARIOS"
+  </Step>
+  
+  <Step title="Fill in all 11 biometric parameters">
+    Complete each field with your current health measurements:
+    
+    ### Metabolic Parameters
+    - **Nivel de Glucosa** (Glucose Level) - in mg/dL (0-999)
+    - **Edad** (Age) - in years (0-150)
+    - **Altura** (Height) - in meters (e.g., 1.75)
+    - **Peso** (Weight) - in kilograms (e.g., 70.5)
+    
+    ### Cardiovascular Parameters
+    - **Presión Arterial Sistólica** (Systolic Blood Pressure) - upper number in mmHg (0-300)
+    - **Presión Arterial Diastólica** (Diastolic Blood Pressure) - lower number in mmHg (0-200)
+    - **Frecuencia Cardíaca** (Heart Rate) - beats per minute (0-300)
+    - **Oxigenación de la sangre** (Blood Oxygen Saturation) - percentage (0-100)
+    
+    ### Vital Signs
+    - **Temperatura Corporal** (Body Temperature) - in Celsius (0-50)
+    - **Frecuencia Respiratoria** (Respiratory Rate) - breaths per minute (0-150)
+    
+    ### Blood Information
+    - **Tipo de Sangre** (Blood Type) - Select from dropdown: O+, O-, A+, A-, B+, B-, AB+, AB-
+  </Step>
+  
+  <Step title="Submit your data">
+    Click **Guardar Información** (Save Information) to submit your health data. You'll see a success message when your data is saved.
+  </Step>
+</Steps>
+
+### Medical Data Submission
+
+The form data is sent to the API with your user ID:
+
+```javascript
+const userId = localStorage.getItem('userId');
+
+const response = await fetch('http://localhost:3001/api/medical-info', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    glucose: 95,
+    oxygenBlood: 98,
+    bloodPressureSystolic: 120,
+    bloodPressureDiastolic: 80,
+    temperature: 36.5,
+    age: 30,
+    height: 1.75,
+    weight: 70,
+    respiratoryRate: 16,
+    bloodType: 'O+',
+    heartRate: 72,
+    userId: userId
+  })
+});
+```
+
+<Tip>
+  All fields are required. Make sure to fill in every measurement before submitting the form.
+</Tip>
+
+## Step 4: View Your Health Analysis
+
+After submitting your medical data, MediGuide automatically analyzes your biometrics and generates personalized health insights.
+
+<Steps>
+  <Step title="Review your current data">
+    Scroll to the **Tus Datos Médicos Actuales** section to see all your submitted measurements displayed in an organized grid.
+  </Step>
+  
+  <Step title="Check detected findings">
+    If any parameters fall outside normal ranges, you'll see the **Hallazgos Detectados** (Detected Findings) section with:
+    
+    - Parameter name and severity level
+    - Your actual value
+    - Possible symptoms to watch for
+    - Specific recommendations
+    - Risk classification (BAJO, MEDIO, ALTO, or CRÍTICO)
+    
+    <Info>
+      Each finding card is color-coded by risk level to help you prioritize actions.
+    </Info>
+  </Step>
+  
+  <Step title="Access your personalized health plans">
+    If risk factors are detected, the **Planes de Salud Recomendados** section will display custom health plans including:
+    
+    - Plan name and duration (weekly or monthly)
+    - Specific activities and timelines
+    - Dietary recommendations
+    - Exercise protocols
+    - Follow-up schedules
+  </Step>
+  
+  <Step title="Review healthy parameters">
+    If all your measurements are within normal ranges, you'll see an **¡Excelente!** section with general wellness recommendations to maintain your health.
+  </Step>
+</Steps>
+
+### Example Health Analysis Response
+
+When you fetch your latest medical data:
+
+```javascript
+const userId = localStorage.getItem('userId');
+
+const response = await fetch(
+  `http://localhost:3001/api/medical-info/latest?userId=${userId}`
+);
+
+const data = await response.json();
+// Returns your most recent medical record with all biometric values
+```
+
+## Step 5: Update Your Health Data
+
+You can submit new health checks at any time to track changes over time.
+
+<Steps>
+  <Step title="Navigate back to the form">
+    Scroll to the **CHEQUEO MEDICO** form section on the main dashboard.
+  </Step>
+  
+  <Step title="Enter new measurements">
+    Fill in your updated biometric data. The form clears after each successful submission.
+  </Step>
+  
+  <Step title="Submit and analyze">
+    Click **Guardar Información** to save your new data. The health analysis section will automatically refresh with updated insights.
+  </Step>
+</Steps>
+
+<Note>
+  Each medical record is timestamped with `created_at`, allowing you to track your health journey over time.
+</Note>
+
+## Next Steps
+
+Now that you've completed your first health check, explore more features:
+
+<CardGroup cols={2}>
+  <Card title="Understanding Health Analysis" icon="chart-line" href="/features/health-analysis">
+    Learn how MediGuide analyzes your biometric data and classifies health risks
+  </Card>
+  
+  <Card title="Medical Tracking Guide" icon="notes-medical" href="/features/medical-tracking">
+    Discover all 11 trackable parameters and their normal ranges
+  </Card>
+  
+  <Card title="Personalized Health Plans" icon="clipboard-list" href="/features/personalized-plans">
+    Explore how custom health plans are generated based on your data
+  </Card>
+  
+  <Card title="Password Recovery" icon="key" href="/guides/password-recovery">
+    Learn how to reset your password if you forget it
+  </Card>
+</CardGroup>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="I'm getting a connection error" icon="triangle-exclamation">
+    Ensure the MediGuide server is running on `http://localhost:3001`. Check the console for error messages.
+    
+    ```bash
+    # Start the server
+    node server.js
+    ```
+    
+    You should see: `Server running on port 3001`
+  </Accordion>
+  
+  <Accordion title="My username or email is already registered" icon="user-xmark">
+    Each username and email must be unique. Try a different username or use the login form if you already have an account.
+  </Accordion>
+  
+  <Accordion title="Password fields don't match" icon="lock">
+    Make sure both password fields contain exactly the same value. Use the **Mostrar** buttons to verify your entries.
+  </Accordion>
+  
+  <Accordion title="No medical records found" icon="database">
+    If you see "No hay datos médicos registrados", you need to complete the medical check form first. Make sure you're logged in and submit all 11 required fields.
+  </Accordion>
+  
+  <Accordion title="Health analysis isn't showing" icon="chart-line">
+    After submitting medical data, the analysis should appear automatically. Try refreshing the page if the health plan section doesn't update.
+  </Accordion>
+</AccordionGroup>
+
+## Database Schema Reference
+
+Your medical data is stored securely in two main tables:
+
+### Users Table
+
+```sql
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  username VARCHAR(255) UNIQUE NOT NULL,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  reset_code VARCHAR(10),
+  reset_code_expiry TIMESTAMP,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+### Medical Records Table
+
+```sql
+CREATE TABLE medical_records (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  glucose NUMERIC,
+  oxygen_blood NUMERIC,
+  blood_pressure_systolic NUMERIC,
+  blood_pressure_diastolic NUMERIC,
+  temperature NUMERIC,
+  age INTEGER,
+  height NUMERIC,
+  weight NUMERIC,
+  respiratory_rate NUMERIC,
+  blood_type VARCHAR(2),
+  heart_rate NUMERIC,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+<Info>
+  All medical records are linked to your user account via `user_id` and are automatically deleted if your account is removed (CASCADE deletion).
+</Info>
+
+## Need Help?
+
+<Card title="API Reference" icon="code" href="/api/overview">
+  View complete API documentation including all endpoints, request/response formats, and error codes
+</Card>

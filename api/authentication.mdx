@@ -1,0 +1,373 @@
+---
+title: 'Authentication'
+description: 'User authentication and session management in MediGuide API'
+---
+
+## Authentication Overview
+
+The MediGuide API uses a simple user ID-based authentication system. After successful login or signup, the client receives a `userId` which should be stored and included in subsequent requests that require user identification.
+
+## User Registration
+
+### Signup
+
+Create a new user account.
+
+```bash
+curl -X POST http://localhost:3001/api/users/signup \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "john_doe",
+    "email": "john@example.com",
+    "password": "securePassword123"
+  }'
+```
+
+<ParamField body="username" type="string" required>
+  Unique username for the account
+</ParamField>
+
+<ParamField body="email" type="string" required>
+  User's email address (must be unique)
+</ParamField>
+
+<ParamField body="password" type="string" required>
+  User's password
+</ParamField>
+
+#### Response (201)
+
+```json
+{
+  "message": "User registered successfully",
+  "userId": 1,
+  "username": "john_doe"
+}
+```
+
+<ResponseField name="message" type="string">
+  Success message
+</ResponseField>
+
+<ResponseField name="userId" type="integer">
+  Unique identifier for the newly created user
+</ResponseField>
+
+<ResponseField name="username" type="string">
+  Username of the registered user
+</ResponseField>
+
+#### Error Responses
+
+**400 Bad Request** - User or email already exists:
+
+```json
+{
+  "error": "Usuario ya está registrado"
+}
+```
+
+or
+
+```json
+{
+  "error": "Correo ya está registrado"
+}
+```
+
+**500 Internal Server Error**:
+
+```json
+{
+  "error": "Detailed error message"
+}
+```
+
+## User Login
+
+Authenticate an existing user.
+
+```bash
+curl -X POST http://localhost:3001/api/users/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "john_doe",
+    "password": "securePassword123"
+  }'
+```
+
+<ParamField body="username" type="string" required>
+  User's username
+</ParamField>
+
+<ParamField body="password" type="string" required>
+  User's password
+</ParamField>
+
+#### Response (200)
+
+```json
+{
+  "message": "Login successful",
+  "userId": 1,
+  "username": "john_doe"
+}
+```
+
+<ResponseField name="message" type="string">
+  Success message
+</ResponseField>
+
+<ResponseField name="userId" type="integer">
+  User's unique identifier (store this for authenticated requests)
+</ResponseField>
+
+<ResponseField name="username" type="string">
+  Authenticated user's username
+</ResponseField>
+
+#### Error Responses
+
+**401 Unauthorized** - Invalid credentials:
+
+```json
+{
+  "error": "Usuario o contraseña incorrectos"
+}
+```
+
+## Password Recovery
+
+### Request Reset Code
+
+Request a password reset code to be sent to the user's email.
+
+```bash
+curl -X POST http://localhost:3001/api/users/forgot-password \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "john@example.com"
+  }'
+```
+
+<ParamField body="email" type="string" required>
+  Email address associated with the account
+</ParamField>
+
+#### Response (200)
+
+```json
+{
+  "message": "Reset code sent to email",
+  "resetCode": "123456"
+}
+```
+
+<ResponseField name="message" type="string">
+  Success message
+</ResponseField>
+
+<ResponseField name="resetCode" type="string">
+  6-digit reset code (valid for 30 minutes)
+</ResponseField>
+
+#### Error Responses
+
+**404 Not Found** - Email not found:
+
+```json
+{
+  "error": "No se encontró cuenta con este correo"
+}
+```
+
+### Verify Reset Code
+
+Verify the reset code before allowing password change.
+
+```bash
+curl -X POST http://localhost:3001/api/users/verify-reset-code \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "john@example.com",
+    "resetCode": "123456"
+  }'
+```
+
+<ParamField body="email" type="string" required>
+  Email address associated with the account
+</ParamField>
+
+<ParamField body="resetCode" type="string" required>
+  6-digit reset code received from forgot-password endpoint
+</ParamField>
+
+#### Response (200)
+
+```json
+{
+  "message": "Reset code verified",
+  "userId": 1
+}
+```
+
+<ResponseField name="message" type="string">
+  Success message
+</ResponseField>
+
+<ResponseField name="userId" type="integer">
+  User ID associated with the verified reset code
+</ResponseField>
+
+#### Error Responses
+
+**401 Unauthorized** - Invalid or expired code:
+
+```json
+{
+  "error": "Código de recuperación inválido"
+}
+```
+
+or
+
+```json
+{
+  "error": "El código de recuperación ha expirado"
+}
+```
+
+### Reset Password
+
+Reset the user's password using the verified reset code.
+
+```bash
+curl -X POST http://localhost:3001/api/users/reset-password \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "john@example.com",
+    "resetCode": "123456",
+    "newPassword": "newSecurePassword456"
+  }'
+```
+
+<ParamField body="email" type="string" required>
+  Email address associated with the account
+</ParamField>
+
+<ParamField body="resetCode" type="string" required>
+  6-digit reset code received from forgot-password endpoint
+</ParamField>
+
+<ParamField body="newPassword" type="string" required>
+  New password (minimum 6 characters)
+</ParamField>
+
+#### Response (200)
+
+```json
+{
+  "message": "Contraseña actualizada exitosamente",
+  "userId": 1,
+  "username": "john_doe"
+}
+```
+
+<ResponseField name="message" type="string">
+  Success message
+</ResponseField>
+
+<ResponseField name="userId" type="integer">
+  User's unique identifier
+</ResponseField>
+
+<ResponseField name="username" type="string">
+  User's username
+</ResponseField>
+
+#### Error Responses
+
+**400 Bad Request** - Invalid password:
+
+```json
+{
+  "error": "La contraseña debe tener al menos 6 caracteres"
+}
+```
+
+**401 Unauthorized** - Invalid or expired code:
+
+```json
+{
+  "error": "Código de recuperación inválido"
+}
+```
+
+or
+
+```json
+{
+  "error": "El código de recuperación ha expirado"
+}
+```
+
+## Session Management
+
+### Client-Side Storage
+
+After successful login or signup, the client should store the `userId` in localStorage for subsequent authenticated requests:
+
+```javascript
+// Store after login/signup
+localStorage.setItem('userId', response.userId);
+localStorage.setItem('username', response.username);
+
+// Retrieve for authenticated requests
+const userId = localStorage.getItem('userId');
+```
+
+### Using User ID in Requests
+
+Include the `userId` in request bodies or query parameters for endpoints that require user identification:
+
+```bash
+# Example: Get latest medical record
+curl "http://localhost:3001/api/medical-info/latest?userId=1"
+```
+
+```bash
+# Example: Create medical record
+curl -X POST http://localhost:3001/api/medical-info \
+  -H "Content-Type: application/json" \
+  -d '{
+    "userId": 1,
+    "glucose": 95,
+    "heartRate": 72,
+    ...
+  }'
+```
+
+## Security Considerations
+
+<Warning>
+  The current implementation stores passwords in plain text and does not use token-based authentication. This is suitable for development/demonstration purposes only.
+</Warning>
+
+### Production Recommendations
+
+For production deployment, consider implementing:
+
+1. **Password Hashing**: Use bcrypt or similar to hash passwords before storage
+2. **JWT Tokens**: Implement token-based authentication instead of user ID in localStorage
+3. **HTTPS**: Always use HTTPS in production to encrypt data in transit
+4. **Rate Limiting**: Add rate limiting to prevent brute force attacks
+5. **CORS Configuration**: Configure CORS to allow only trusted origins
+6. **Session Expiry**: Implement session timeout and token refresh mechanisms
+7. **Email Verification**: Send actual emails for password reset instead of returning codes in response
+
+### Reset Code Security
+
+- Reset codes are 6-digit random numbers
+- Codes expire after 30 minutes
+- Codes are invalidated after successful password reset
+- Only one reset code is active per user at a time

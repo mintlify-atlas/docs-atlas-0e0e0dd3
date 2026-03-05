@@ -1,97 +1,126 @@
 ---
-title: "Introduction"
-description: "Welcome to the new home for your documentation"
+title: Welcome to MediGuide
+description: Your personalized health monitoring platform that provides expert medical guidance based on your biometric data
 ---
 
-## Setting up
+<div className="relative overflow-hidden rounded-3xl" style={{ background: '#3B3B37', padding: '4rem 2rem', marginBottom: '3rem' }}>
+  <div className="mx-auto max-w-4xl text-center">
+    <h1 className="text-5xl font-bold mb-6" style={{ color: '#FFFFFF', fontFamily: 'Inter, sans-serif' }}>
+      Your Health, Intelligently Monitored
+    </h1>
+    <p className="text-xl mb-8" style={{ color: '#E6C75B', fontFamily: 'Inter, sans-serif' }}>
+      MediGuide provides personalized medical guidance based on comprehensive biometric analysis
+    </p>
+    <div className="flex gap-4 justify-center flex-wrap">
+      <a 
+        href="/quickstart" 
+        className="inline-block px-8 py-3 text-base font-semibold transition-all"
+        style={{ 
+          background: '#f0d85c', 
+          color: '#2e2e2e', 
+          borderRadius: '20px',
+          textDecoration: 'none'
+        }}
+      >
+        Get Started
+      </a>
+      <a 
+        href="/features/health-analysis" 
+        className="inline-block px-8 py-3 text-base font-semibold transition-all"
+        style={{ 
+          background: 'transparent', 
+          color: '#f0d85c', 
+          border: '2px solid #f0d85c',
+          borderRadius: '20px',
+          textDecoration: 'none'
+        }}
+      >
+        Learn More
+      </a>
+    </div>
+  </div>
+</div>
 
-Get your documentation site up and running in minutes.
+## Key Features
 
-<Card
-  title="Start here"
-  icon="rocket"
-  href="/quickstart"
-  horizontal
->
-  Follow our three step quickstart guide.
-</Card>
-
-## Make it yours
-
-Design a docs site that looks great and empowers your users.
-
-<Columns cols={2}>
-  <Card
-    title="Edit locally"
-    icon="pen-to-square"
-    href="/development"
-  >
-    Edit your docs locally and preview them in real time.
+<CardGroup cols={2}>
+  <Card title="Smart Authentication" icon="shield-check" href="/features/authentication">
+    Secure user authentication with password recovery and account management
   </Card>
-  <Card
-    title="Customize your site"
-    icon="palette"
-    href="/essentials/settings"
-  >
-    Customize the design and colors of your site to match your brand.
+  <Card title="Medical Tracking" icon="heart-pulse" href="/features/medical-tracking">
+    Track 11 comprehensive biometric parameters including glucose, blood pressure, and more
   </Card>
-    <Card
-    title="Set up navigation"
-    icon="map"
-    href="/essentials/navigation"
-  >
-    Organize your docs to help users find what they need and succeed with your product.
+  <Card title="Health Analysis" icon="chart-line" href="/features/health-analysis">
+    Real-time health risk assessment with symptom detection and severity classification
   </Card>
-  <Card
-    title="API documentation"
-    icon="terminal"
-    href="/api-reference/introduction"
-  >
-    Auto-generate API documentation from OpenAPI specifications.
+  <Card title="Personalized Plans" icon="calendar-days" href="/features/personalized-plans">
+    Custom health plans with actionable recommendations based on your data
   </Card>
-</Columns>
+</CardGroup>
 
-## Create beautiful pages
+## How It Works
 
-Everything you need to create world-class documentation.
+<Steps>
+  <Step title="Create Your Account">
+    Sign up securely with email verification and password protection
+  </Step>
+  <Step title="Enter Your Medical Data">
+    Input your biometric measurements through our comprehensive health form
+  </Step>
+  <Step title="Get Instant Analysis">
+    Receive immediate health risk assessments and symptom detection
+  </Step>
+  <Step title="Follow Your Plan">
+    Access personalized health plans with weekly and monthly guidance
+  </Step>
+</Steps>
 
-<Columns cols={2}>
-  <Card
-    title="Write with MDX"
-    icon="pen-fancy"
-    href="/essentials/markdown"
-  >
-    Use MDX to style your docs pages.
-  </Card>
-  <Card
-    title="Code samples"
-    icon="code"
-    href="/essentials/code"
-  >
-    Add sample code to demonstrate how to use your product.
-  </Card>
-  <Card
-    title="Images"
-    icon="image"
-    href="/essentials/images"
-  >
-    Display images and other media.
-  </Card>
-  <Card
-    title="Reusable snippets"
-    icon="recycle"
-    href="/essentials/reusable-snippets"
-  >
-    Write once and reuse across your docs.
-  </Card>
-</Columns>
+## Comprehensive Health Monitoring
 
-## Need inspiration?
+MediGuide tracks vital health parameters to provide you with complete insights:
 
-<Card
-  title="See complete examples"
-  icon="stars"
-  href="https://mintlify.com/customers"
->
-  Browse our showcase of exceptional documentation sites.
-</Card>
+- **Glucose Levels** - Monitor blood sugar and detect diabetes risk
+- **Blood Pressure** - Track systolic and diastolic readings with hypertension alerts
+- **Oxygen Saturation** - Measure SpO₂ levels and detect hypoxemia
+- **Heart Rate** - Monitor cardiac rhythm and detect arrhythmias
+- **Body Temperature** - Track fever and hypothermia risks
+- **Respiratory Rate** - Monitor breathing patterns
+- **Body Composition** - Calculate BMI and track weight management
+- **Blood Type** - Store critical medical information
+
+## Quick Links
+
+<CardGroup cols={3}>
+  <Card title="Quick Start" icon="rocket" href="/quickstart">
+    Get up and running in 5 minutes
+  </Card>
+  <Card title="User Guides" icon="book-open" href="/guides/creating-account">
+    Step-by-step tutorials
+  </Card>
+  <Card title="API Reference" icon="code" href="/api/overview">
+    Complete API documentation
+  </Card>
+</CardGroup>
+
+## Why Choose MediGuide?
+
+<Note>
+  MediGuide combines advanced health analytics with user-friendly design to help you take control of your health journey. Our platform provides evidence-based recommendations while keeping your data secure and private.
+</Note>
+
+<Warning>
+  **Medical Disclaimer**: MediGuide provides educational health information and does NOT replace professional medical advice. Always consult with qualified healthcare providers for diagnosis and treatment decisions.
+</Warning>
+
+## Ready to Start?
+
+Begin your health monitoring journey today with MediGuide's comprehensive platform.
+
+<CardGroup cols={2}>
+  <Card title="Create Account" icon="user-plus" href="/guides/creating-account">
+    Sign up and set up your profile
+  </Card>
+  <Card title="Enter Medical Data" icon="notes-medical" href="/guides/entering-medical-data">
+    Learn how to track your health metrics
+  </Card>
+</CardGroup>

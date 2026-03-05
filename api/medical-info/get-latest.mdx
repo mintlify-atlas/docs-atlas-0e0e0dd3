@@ -1,0 +1,118 @@
+---
+title: 'Get Latest Medical Record'
+api: 'GET /api/medical-info/latest'
+description: 'Retrieve the most recent medical record for a specific user'
+---
+
+## Query Parameters
+
+<ParamField query="userId" type="integer" required>
+  The ID of the user whose latest medical record should be retrieved
+</ParamField>
+
+## Response
+
+<ResponseField name="id" type="integer">
+  The unique identifier for the medical record
+</ResponseField>
+
+<ResponseField name="user_id" type="integer">
+  The ID of the user this record belongs to
+</ResponseField>
+
+<ResponseField name="glucose" type="number">
+  Blood glucose level (mg/dL)
+</ResponseField>
+
+<ResponseField name="oxygen_blood" type="number">
+  Blood oxygen saturation level (%)
+</ResponseField>
+
+<ResponseField name="blood_pressure_systolic" type="number">
+  Systolic blood pressure (mmHg)
+</ResponseField>
+
+<ResponseField name="blood_pressure_diastolic" type="number">
+  Diastolic blood pressure (mmHg)
+</ResponseField>
+
+<ResponseField name="temperature" type="number">
+  Body temperature (°F or °C)
+</ResponseField>
+
+<ResponseField name="age" type="integer">
+  Patient's age in years
+</ResponseField>
+
+<ResponseField name="height" type="number">
+  Patient's height (cm or inches)
+</ResponseField>
+
+<ResponseField name="weight" type="number">
+  Patient's weight (kg or lbs)
+</ResponseField>
+
+<ResponseField name="respiratory_rate" type="number">
+  Respiratory rate (breaths per minute)
+</ResponseField>
+
+<ResponseField name="blood_type" type="string">
+  Blood type (e.g., A+, B-, O+, AB-)
+</ResponseField>
+
+<ResponseField name="heart_rate" type="number">
+  Heart rate (beats per minute)
+</ResponseField>
+
+<ResponseField name="created_at" type="timestamp">
+  The timestamp when the record was created
+</ResponseField>
+
+<RequestExample>
+
+```bash cURL
+curl -X GET "https://api.mediguide.com/api/medical-info/latest?userId=123"
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Success (200)
+{
+  "id": 456,
+  "user_id": 123,
+  "glucose": 95,
+  "oxygen_blood": 98,
+  "blood_pressure_systolic": 120,
+  "blood_pressure_diastolic": 80,
+  "temperature": 98.6,
+  "age": 35,
+  "height": 175,
+  "weight": 70,
+  "respiratory_rate": 16,
+  "blood_type": "A+",
+  "heart_rate": 72,
+  "created_at": "2026-03-05T10:30:00.000Z"
+}
+```
+
+```json Error - Missing userId (400)
+{
+  "error": "userId is required"
+}
+```
+
+```json Error - No Records (404)
+{
+  "error": "No medical records found"
+}
+```
+
+```json Error - Server Error (500)
+{
+  "error": "Database connection failed"
+}
+```
+
+</ResponseExample>

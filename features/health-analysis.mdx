@@ -1,0 +1,567 @@
+---
+title: 'Health Risk Analysis'
+description: 'Automated health risk assessment and symptom detection using biometric thresholds'
+icon: 'chart-line'
+---
+
+## Overview
+
+MediGuide analyzes 11 biometric parameters against medical thresholds to detect potential health risks, identify symptoms, and classify severity levels. The system automatically generates personalized health alerts based on the latest medical data.
+
+## Risk Severity Levels
+
+The analysis engine uses four risk severity classifications:
+
+<CardGroup cols={2}>
+
+<Card title="CRITICAL" icon="skull" color="#d32f2f">
+  Life-threatening conditions requiring immediate medical attention
+</Card>
+
+<Card title="HIGH" icon="triangle-exclamation" color="#f57c00">
+  Serious conditions requiring urgent medical consultation
+</Card>
+
+<Card title="MEDIUM" icon="circle-exclamation" color="#fbc02d">
+  Moderate concerns requiring monitoring and lifestyle changes
+</Card>
+
+<Card title="LOW" icon="circle-info" color="#1976d2">
+  Minor deviations or conditions for awareness
+</Card>
+
+</CardGroup>
+
+## Analysis Algorithm
+
+The health analysis runs automatically when medical data is fetched:
+
+```javascript
+const fetchMedicalData = async () => {
+  const userId = localStorage.getItem('userId');
+  const response = await fetch(
+    `http://localhost:3001/api/medical-info/latest?userId=${userId}`
+  );
+  const data = await response.json();
+  
+  if (response.ok) {
+    setMedicalData(data);
+    analyzeHealth(data); // Automatic analysis
+  }
+};
+```
+
+## Glucose Analysis
+
+### Hypoglycemia (Critical)
+
+```javascript
+if (data.glucose < 70) {
+  detectedSymptoms.push({
+    parameter: 'Glucosa',
+    level: 'CRÍTICO - Hipoglucemia',
+    value: `${data.glucose} mg/dL`,
+    symptoms: [
+      'Temblores', 
+      'Sudoración', 
+      'Palpitaciones', 
+      'Mareos', 
+      'Confusión'
+    ],
+    recommendations: [
+      'Consumir azúcar o bebida azucarada inmediatamente',
+      'Buscar atención médica urgente',
+      'Descansar y mantenerse hidratado'
+    ],
+    risk: 'ALTO'
+  });
+}
+```
+
+<Warning>
+**Glucose < 70 mg/dL:** Critical hypoglycemia requiring immediate sugar consumption and medical attention.
+</Warning>
+
+### Prediabetes (Medium Risk)
+
+```javascript
+else if (data.glucose >= 100 && data.glucose <= 125) {
+  detectedSymptoms.push({
+    parameter: 'Glucosa',
+    level: 'PREDIABETES',
+    value: `${data.glucose} mg/dL`,
+    symptoms: [
+      'Sed excesiva', 
+      'Mayor frecuencia urinaria', 
+      'Fatiga', 
+      'Visión borrosa'
+    ],
+    recommendations: [
+      'Reducir ingesta de azúcares y carbohidratos refinados',
+      'Aumentar actividad física (30 min/día)',
+      'Consultar endocrinólogo',
+      'Monitorear glucosa regularmente'
+    ],
+    risk: 'MEDIO'
+  });
+}
+```
+
+<Info>
+**Glucose 100-125 mg/dL:** Prediabetes range requiring lifestyle modifications.
+</Info>
+
+### Diabetes (Critical)
+
+```javascript
+else if (data.glucose > 125) {
+  detectedSymptoms.push({
+    parameter: 'Glucosa',
+    level: 'DIABETES - Valores Elevados',
+    value: `${data.glucose} mg/dL`,
+    symptoms: [
+      'Sed excesiva', 
+      'Micción frecuente', 
+      'Fatiga crónica', 
+      'Infecciones recurrentes', 
+      'Visión borrosa'
+    ],
+    recommendations: [
+      'Consultar médico inmediatamente',
+      'Iniciar tratamiento farmacológico si es necesario',
+      'Cambios dietéticos severos',
+      'Monitoreo diario de glucosa'
+    ],
+    risk: 'CRÍTICO'
+  });
+}
+```
+
+<Warning>
+**Glucose > 125 mg/dL:** Diabetes range requiring immediate medical consultation.
+</Warning>
+
+## Blood Oxygen (SpO₂) Analysis
+
+### Hypoxemia Detection
+
+```javascript
+if (data.oxygen_blood < 90) {
+  detectedSymptoms.push({
+    parameter: 'Saturación de Oxígeno (SpO₂)',
+    level: data.oxygen_blood < 75 ? 
+           'CRÍTICO - Hipoxemia Grave' : 
+           'ALERTA - Hipoxemia',
+    value: `${data.oxygen_blood}%`,
+    symptoms: [
+      'Falta de aire', 
+      'Fatiga', 
+      'Mareos', 
+      'Confusión', 
+      'Color azulado en piel'
+    ],
+    recommendations: data.oxygen_blood < 75 ? [
+      'Buscar atención médica de emergencia',
+      'Oxígeno suplementario requerido',
+      'No realizar actividad física'
+    ] : [
+      'Descansar en posición sentada',
+      'Respirar profundamente',
+      'Consultar médico',
+      'Evitar actividad extenuante'
+    ],
+    risk: data.oxygen_blood < 75 ? 'CRÍTICO' : 'ALTO'
+  });
+}
+```
+
+<CardGroup cols={2}>
+
+<Card title="Severe Hypoxemia" icon="skull">
+  **SpO₂ < 75%:** CRITICAL - Emergency medical care required
+</Card>
+
+<Card title="Moderate Hypoxemia" icon="triangle-exclamation">
+  **SpO₂ 75-89%:** HIGH risk - Medical consultation needed
+</Card>
+
+</CardGroup>
+
+## Blood Pressure Analysis
+
+### Comprehensive BP Classification
+
+```javascript
+const sys = data.blood_pressure_systolic;
+const dia = data.blood_pressure_diastolic;
+
+let bpLevel = 'Normal';
+let bpRisk = 'BAJO';
+let bpSymptoms = [];
+
+if (sys >= 180 || dia >= 120) {
+  bpLevel = 'EMERGENCIA - Crisis Hipertensiva';
+  bpRisk = 'CRÍTICO';
+  bpSymptoms = [
+    'Dolor de cabeza intenso', 
+    'Sudoración', 
+    'Ansiedad severa', 
+    'Dolor torácico', 
+    'Visión borrosa'
+  ];
+} else if (sys >= 140 || dia >= 90) {
+  bpLevel = 'HIPERTENSIÓN Etapa 2';
+  bpRisk = 'ALTO';
+  bpSymptoms = [
+    'A menudo asintomática', 
+    'Cefalea ocasional', 
+    'Visión borrosa', 
+    'Fatiga'
+  ];
+} else if (sys >= 130 || dia >= 80) {
+  bpLevel = 'HIPERTENSIÓN Etapa 1';
+  bpRisk = 'MEDIO';
+  bpSymptoms = [
+    'Generalmente asintomática', 
+    'Posible fatiga leve', 
+    'Dolor de cabeza ocasional'
+  ];
+}
+```
+
+### Blood Pressure Thresholds
+
+<Tabs>
+  <Tab title="Hypertensive Crisis">
+    **Systolic ≥ 180 OR Diastolic ≥ 120 mmHg**
+    
+    - **Risk Level:** CRITICAL
+    - **Symptoms:** Severe headache, sweating, severe anxiety, chest pain, blurred vision
+    - **Action:** ⚠️ EMERGENCY - Seek immediate medical attention
+    - **Recommendations:**
+      - Remain lying down and calm
+      - Do NOT self-medicate
+      - Call emergency services
+  </Tab>
+  
+  <Tab title="Stage 2 Hypertension">
+    **Systolic ≥ 140 OR Diastolic ≥ 90 mmHg**
+    
+    - **Risk Level:** HIGH
+    - **Symptoms:** Often asymptomatic, occasional headache, blurred vision, fatigue
+    - **Recommendations:**
+      - Reduce salt intake to &lt;2.3g/day
+      - Increase aerobic exercise (150 min/week)
+      - Reduce stress with meditation
+      - Limit alcohol consumption
+      - Start medication if doctor indicates
+  </Tab>
+  
+  <Tab title="Stage 1 Hypertension">
+    **Systolic ≥ 130 OR Diastolic ≥ 80 mmHg**
+    
+    - **Risk Level:** MEDIUM
+    - **Symptoms:** Generally asymptomatic, possible mild fatigue, occasional headache
+    - **Recommendations:**
+      - Dietary modifications (DASH diet)
+      - Regular blood pressure monitoring
+      - Stress reduction techniques
+      - Lifestyle changes
+  </Tab>
+</Tabs>
+
+### Blood Pressure Alert Structure
+
+```javascript
+if (bpRisk !== 'BAJO') {
+  detectedSymptoms.push({
+    parameter: 'Presión Arterial',
+    level: bpLevel,
+    value: `${sys}/${dia} mmHg`,
+    systolic: `${sys} mmHg (Sistólica - Número superior)`,
+    diastolic: `${dia} mmHg (Diastólica - Número inferior)`,
+    symptoms: bpSymptoms,
+    recommendations: sys >= 180 || dia >= 120 ? [
+      '⚠️ EMERGENCIA: Buscar atención médica inmediata',
+      'Permanecer acostado y calmado',
+      'No automedicarse',
+      'Llamar a emergencias'
+    ] : [
+      'Reducir ingesta de sal a <2.3g/día',
+      'Aumentar ejercicio aeróbico (150 min/semana)',
+      'Reducir estrés con meditación',
+      'Limitar consumo de alcohol',
+      'Iniciar medicación si médico lo indica'
+    ],
+    risk: bpRisk
+  });
+}
+```
+
+## Heart Rate Analysis
+
+### Tachycardia (Fast Heart Rate)
+
+```javascript
+if (data.heart_rate > 100) {
+  detectedSymptoms.push({
+    parameter: 'Frecuencia Cardíaca',
+    level: 'TAQUICARDIA',
+    value: `${data.heart_rate} lpm`,
+    symptoms: [
+      'Palpitaciones', 
+      'Ansiedad', 
+      'Fatiga', 
+      'Mareos en algunos casos'
+    ],
+    recommendations: [
+      'Reducir cafeína y estrés',
+      'Aumentar ejercicio cardiovascular gradualmente',
+      'Técnicas de relajación (meditación)',
+      'Consultar cardiólogo si persiste'
+    ],
+    risk: 'MEDIO'
+  });
+}
+```
+
+<Info>
+**Heart Rate > 100 bpm:** Tachycardia - reduce caffeine and stress
+</Info>
+
+### Bradycardia (Slow Heart Rate)
+
+```javascript
+else if (data.heart_rate < 60 && data.age < 50) {
+  detectedSymptoms.push({
+    parameter: 'Frecuencia Cardíaca',
+    level: 'BRADICARDIA',
+    value: `${data.heart_rate} lpm`,
+    symptoms: [
+      'Fatiga', 
+      'Mareos', 
+      'Síncope en casos severos'
+    ],
+    recommendations: [
+      'Evaluar si hay síntomas asociados',
+      'Consultar cardiólogo para descartar problemas de conducción',
+      'Monitoreo continuo'
+    ],
+    risk: 'BAJO-MEDIO'
+  });
+}
+```
+
+<Note>
+**Heart Rate < 60 bpm (age < 50):** Bradycardia - consult cardiologist if symptomatic
+</Note>
+
+## Temperature Analysis
+
+### Fever Detection
+
+```javascript
+if (data.temperature >= 38) {
+  const level = data.temperature >= 41 ? 
+                'CRÍTICO - Hipertermia Peligrosa' : 
+                data.temperature >= 39.5 ? 
+                'FIEBRE ALTA' : 
+                'FIEBRE';
+  
+  detectedSymptoms.push({
+    parameter: 'Temperatura Corporal',
+    level: level,
+    value: `${data.temperature}°C`,
+    symptoms: [
+      'Escalofríos', 
+      'Malestar general', 
+      'Dolor corporal', 
+      'Sudoración en niveles altos'
+    ],
+    recommendations: data.temperature >= 41 ? [
+      'EMERGENCIA: Ir a urgencias inmediatamente',
+      'Aplicar compresas frías',
+      'Hidratación inmediata'
+    ] : [
+      'Reposo en cama',
+      'Hidratación abundante',
+      'Paracetamol o ibuprofeno según indicaciones',
+      'Consultar médico si dura >3 días'
+    ],
+    risk: data.temperature >= 41 ? 'CRÍTICO' : 'ALTO'
+  });
+}
+```
+
+### Temperature Thresholds
+
+<Steps>
+  <Step title="Dangerous Hyperthermia (≥41°C)">
+    **CRITICAL** - Go to emergency room immediately. Apply cold compresses.
+  </Step>
+  
+  <Step title="High Fever (≥39.5°C)">
+    **HIGH** - High fever requiring medical attention if persistent.
+  </Step>
+  
+  <Step title="Fever (≥38°C)">
+    **HIGH** - Fever requiring rest, hydration, and monitoring.
+  </Step>
+</Steps>
+
+### Hypothermia Detection
+
+```javascript
+else if (data.temperature < 35) {
+  detectedSymptoms.push({
+    parameter: 'Temperatura Corporal',
+    level: 'HIPOTERMIA - Riesgo Vital',
+    value: `${data.temperature}°C`,
+    symptoms: [
+      'Confusión', 
+      'Temblores', 
+      'Pulso débil', 
+      'Dificultad para hablar'
+    ],
+    recommendations: [
+      'Buscar atención médica de emergencia',
+      'Calentar gradualmente el cuerpo',
+      'Evitar movimientos bruscos'
+    ],
+    risk: 'CRÍTICO'
+  });
+}
+```
+
+<Warning>
+**Temperature < 35°C:** CRITICAL hypothermia - emergency medical care required
+</Warning>
+
+## Respiratory Rate Analysis
+
+### Tachypnea (Rapid Breathing)
+
+```javascript
+if (data.respiratory_rate > 20) {
+  detectedSymptoms.push({
+    parameter: 'Frecuencia Respiratoria',
+    level: 'TAQUIPNEA - Respiración Acelerada',
+    value: `${data.respiratory_rate} resp/min`,
+    symptoms: [
+      'Dificultad para respirar', 
+      'Falta de aire', 
+      'Ansiedad', 
+      'Cansancio'
+    ],
+    recommendations: [
+      'Descansar en ambiente tranquilo',
+      'Técnicas de respiración lenta y profunda',
+      'Consultar médico para descartar infecciones respiratorias',
+      'Evitar contaminación ambiental'
+    ],
+    risk: 'MEDIO'
+  });
+}
+```
+
+<Info>
+**Respiratory Rate > 20 resp/min:** Tachypnea requiring rest and breathing exercises
+</Info>
+
+## BMI (Body Mass Index) Analysis
+
+### BMI Calculation and Classification
+
+```javascript
+if (data.height && data.weight) {
+  const imc = data.weight / (data.height * data.height);
+  let imcStatus = '';
+  
+  if (imc < 18.5) imcStatus = 'BAJO PESO';
+  else if (imc < 25) imcStatus = 'PESO NORMAL';
+  else if (imc < 30) imcStatus = 'SOBREPESO';
+  else imcStatus = 'OBESIDAD';
+
+  if (imcStatus !== 'PESO NORMAL') {
+    detectedSymptoms.push({
+      parameter: 'Índice de Masa Corporal (IMC)',
+      level: imcStatus,
+      value: `${imc.toFixed(1)} kg/m²`,
+      symptoms: [
+        'Fatiga', 
+        'Dificultad para respirar con actividad', 
+        'Problemas articulares'
+      ],
+      recommendations: imcStatus === 'SOBREPESO' || imcStatus === 'OBESIDAD' ? [
+        'Crear déficit calórico de 500 cal/día',
+        'Ejercicio 300 min/semana',
+        'Dieta rica en proteína y fibra',
+        'Consultar nutricionista'
+      ] : [
+        'Aumentar ingesta calórica saludable',
+        'Incluir proteína en cada comida',
+        'Consultar nutricionista'
+      ],
+      risk: imcStatus === 'OBESIDAD' ? 'ALTO' : 'MEDIO'
+    });
+  }
+}
+```
+
+### BMI Classification Table
+
+| BMI Range | Classification | Risk Level |
+|-----------|----------------|------------|
+| < 18.5 | BAJO PESO (Underweight) | MEDIUM |
+| 18.5-24.9 | PESO NORMAL (Normal) | - |
+| 25.0-29.9 | SOBREPESO (Overweight) | MEDIUM |
+| ≥ 30.0 | OBESIDAD (Obesity) | HIGH |
+
+## Analysis Output Structure
+
+Each detected symptom follows this structure:
+
+```typescript
+interface DetectedSymptom {
+  parameter: string;           // Biometric parameter name
+  level: string;              // Condition severity description
+  value: string;              // Actual measured value
+  symptoms: string[];         // List of associated symptoms
+  recommendations: string[];  // List of recommended actions
+  risk: 'CRÍTICO' | 'ALTO' | 'MEDIO' | 'BAJO' | 'BAJO-MEDIO';
+}
+```
+
+## State Management
+
+```javascript
+const [symptoms, setSymptoms] = useState([]);
+
+const analyzeHealth = (data) => {
+  const detectedSymptoms = [];
+  
+  // Run all analysis checks
+  // ... (glucose, oxygen, BP, heart rate, etc.)
+  
+  setSymptoms(detectedSymptoms);
+};
+```
+
+## Healthy Status
+
+When no abnormalities are detected:
+
+```javascript
+if (symptoms.length === 0) {
+  // Display healthy status with general recommendations
+  // - Regular exercise: 150 min/week
+  // - Balanced diet
+  // - 7-9 hours sleep
+  // - Stress management
+  // - Annual medical checkup
+}
+```
+
+<Check>
+When all parameters are within normal ranges, users receive positive feedback and general wellness recommendations.
+</Check>

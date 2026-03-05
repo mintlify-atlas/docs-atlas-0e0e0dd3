@@ -1,0 +1,147 @@
+---
+title: 'API Overview'
+description: 'MediGuide API endpoints for health monitoring and user management'
+---
+
+## Base URL
+
+All API requests should be made to:
+
+```
+http://localhost:3001
+```
+
+## Available Endpoints
+
+The MediGuide API provides the following endpoint categories:
+
+<CardGroup cols={2}>
+  <Card title="User Authentication" icon="user" href="/api/authentication">
+    Signup, login, and password recovery endpoints
+  </Card>
+  <Card title="Medical Records" icon="heart-pulse">
+    Store and retrieve patient health data
+  </Card>
+</CardGroup>
+
+## Response Format
+
+All API responses are returned in JSON format.
+
+### Successful Response
+
+```json
+{
+  "message": "Operation successful",
+  "userId": 123,
+  "username": "john_doe"
+}
+```
+
+### Error Response
+
+```json
+{
+  "error": "Error message describing what went wrong"
+}
+```
+
+## HTTP Status Codes
+
+The API uses standard HTTP status codes:
+
+| Status Code | Description |
+|------------|-------------|
+| `200` | Success - Request completed successfully |
+| `201` | Created - Resource created successfully |
+| `400` | Bad Request - Invalid input or missing required fields |
+| `401` | Unauthorized - Invalid credentials or expired token |
+| `404` | Not Found - Resource not found |
+| `500` | Internal Server Error - Server encountered an error |
+
+## Error Handling
+
+All errors follow a consistent format with descriptive messages:
+
+### Validation Errors (400)
+
+```json
+{
+  "error": "Usuario ya está registrado"
+}
+```
+
+```json
+{
+  "error": "La contraseña debe tener al menos 6 caracteres"
+}
+```
+
+### Authentication Errors (401)
+
+```json
+{
+  "error": "Usuario o contraseña incorrectos"
+}
+```
+
+```json
+{
+  "error": "El código de recuperación ha expirado"
+}
+```
+
+### Not Found Errors (404)
+
+```json
+{
+  "error": "No medical records found"
+}
+```
+
+### Server Errors (500)
+
+```json
+{
+  "error": "Detailed error message"
+}
+```
+
+## Core Endpoints
+
+### User Management
+
+- `POST /api/users/signup` - Register a new user
+- `POST /api/users/login` - Authenticate user
+- `POST /api/users/forgot-password` - Request password reset code
+- `POST /api/users/verify-reset-code` - Verify reset code
+- `POST /api/users/reset-password` - Reset user password
+- `POST /api/users` - Alternative user registration endpoint
+
+### Medical Records
+
+- `POST /api/medical-info` - Create a new medical record
+- `GET /api/medical-info/latest` - Get latest medical record for a user
+
+### Health Check
+
+- `GET /api/health` - Check API and database connectivity
+
+## Quick Start
+
+Test the API connection:
+
+```bash
+curl http://localhost:3001/api/health
+```
+
+Response:
+
+```json
+{
+  "message": "Database connected",
+  "time": {
+    "now": "2026-03-05T10:30:00.000Z"
+  }
+}
+```

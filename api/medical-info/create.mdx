@@ -1,0 +1,105 @@
+---
+title: 'Create Medical Record'
+api: 'POST /api/medical-info'
+description: 'Save a new medical record with biometric data for a user'
+---
+
+## Request Body
+
+<ParamField body="userId" type="integer" required>
+  The ID of the user for whom the medical record is being created
+</ParamField>
+
+<ParamField body="glucose" type="number">
+  Blood glucose level (mg/dL)
+</ParamField>
+
+<ParamField body="oxygenBlood" type="number">
+  Blood oxygen saturation level (%)
+</ParamField>
+
+<ParamField body="bloodPressureSystolic" type="number">
+  Systolic blood pressure (mmHg)
+</ParamField>
+
+<ParamField body="bloodPressureDiastolic" type="number">
+  Diastolic blood pressure (mmHg)
+</ParamField>
+
+<ParamField body="temperature" type="number">
+  Body temperature (°F or °C)
+</ParamField>
+
+<ParamField body="age" type="integer">
+  Patient's age in years
+</ParamField>
+
+<ParamField body="height" type="number">
+  Patient's height (cm or inches)
+</ParamField>
+
+<ParamField body="weight" type="number">
+  Patient's weight (kg or lbs)
+</ParamField>
+
+<ParamField body="respiratoryRate" type="number">
+  Respiratory rate (breaths per minute)
+</ParamField>
+
+<ParamField body="bloodType" type="string">
+  Blood type (e.g., A+, B-, O+, AB-)
+</ParamField>
+
+<ParamField body="heartRate" type="number">
+  Heart rate (beats per minute)
+</ParamField>
+
+## Response
+
+<ResponseField name="message" type="string">
+  Confirmation message
+</ResponseField>
+
+<ResponseField name="id" type="integer">
+  The ID of the newly created medical record
+</ResponseField>
+
+<RequestExample>
+
+```bash cURL
+curl -X POST https://api.mediguide.com/api/medical-info \
+  -H "Content-Type: application/json" \
+  -d '{
+    "userId": 123,
+    "glucose": 95,
+    "oxygenBlood": 98,
+    "bloodPressureSystolic": 120,
+    "bloodPressureDiastolic": 80,
+    "temperature": 98.6,
+    "age": 35,
+    "height": 175,
+    "weight": 70,
+    "respiratoryRate": 16,
+    "bloodType": "A+",
+    "heartRate": 72
+  }'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Success (201)
+{
+  "message": "Medical record saved",
+  "id": 456
+}
+```
+
+```json Error (500)
+{
+  "error": "Database connection failed"
+}
+```
+
+</ResponseExample>

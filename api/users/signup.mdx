@@ -1,0 +1,83 @@
+---
+title: User Signup
+description: Register a new user account in the MediGuide platform
+---
+
+## Endpoint
+
+`POST /api/users/signup`
+
+## Request Body
+
+<ParamField path="username" type="string" required>
+  Unique username for the account. Must not already exist in the system.
+</ParamField>
+
+<ParamField path="email" type="string" required>
+  User's email address. Must not already be registered.
+</ParamField>
+
+<ParamField path="password" type="string" required>
+  Account password for authentication.
+</ParamField>
+
+## Response
+
+Success response (201 Created)
+
+<ResponseField name="message" type="string">
+  Confirmation message: "User registered successfully"
+</ResponseField>
+
+<ResponseField name="userId" type="integer">
+  The unique ID assigned to the newly created user
+</ResponseField>
+
+<ResponseField name="username" type="string">
+  The username of the registered user
+</ResponseField>
+
+## Example Request
+
+```bash
+curl -X POST https://api.mediguide.com/api/users/signup \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "john_doe",
+    "email": "john@example.com",
+    "password": "securePassword123"
+  }'
+```
+
+## Example Response
+
+```json
+{
+  "message": "User registered successfully",
+  "userId": 42,
+  "username": "john_doe"
+}
+```
+
+## Error Responses
+
+### 400 Bad Request - Username Already Exists
+```json
+{
+  "error": "Usuario ya está registrado"
+}
+```
+
+### 400 Bad Request - Email Already Exists
+```json
+{
+  "error": "Correo ya está registrado"
+}
+```
+
+### 500 Internal Server Error
+```json
+{
+  "error": "Error message details"
+}
+```

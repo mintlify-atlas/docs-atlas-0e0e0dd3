@@ -1,0 +1,169 @@
+---
+title: Introduction to MediGuide
+description: A comprehensive health monitoring platform that provides personalized medical guidance based on your biometric data
+---
+
+## What is MediGuide?
+
+MediGuide is a personalized health monitoring platform that helps you track vital biometric measurements and receive actionable health insights. By analyzing your medical data, MediGuide provides customized health plans, symptom detection, and risk assessments to help you take control of your wellness journey.
+
+<Note>
+  **Where health meets technology** - MediGuide combines advanced health analytics with an intuitive interface to make health monitoring accessible to everyone.
+</Note>
+
+## Who Is It For?
+
+MediGuide is designed for anyone who wants to:
+
+- **Monitor chronic conditions** like diabetes, hypertension, or heart disease
+- **Track daily health metrics** to maintain optimal wellness
+- **Receive personalized health recommendations** based on real data
+- **Understand health risks** through comprehensive biometric analysis
+- **Follow structured health plans** tailored to their specific needs
+
+## Key Capabilities
+
+<CardGroup cols={2}>
+  <Card title="Comprehensive Biometric Tracking" icon="heart-pulse">
+    Monitor 11 vital health parameters including glucose, blood pressure, oxygen saturation, heart rate, temperature, and more
+  </Card>
+  
+  <Card title="Intelligent Health Analysis" icon="brain">
+    Real-time risk assessment with automatic detection of hypoglycemia, hypertension, tachycardia, fever, and other conditions
+  </Card>
+  
+  <Card title="Personalized Health Plans" icon="calendar-days">
+    Receive custom weekly and monthly health plans with specific activities and recommendations based on your biometric data
+  </Card>
+  
+  <Card title="Secure Authentication" icon="shield-check">
+    Protected user accounts with password recovery, email verification, and secure data storage
+  </Card>
+</CardGroup>
+
+## What MediGuide Monitors
+
+MediGuide tracks a comprehensive set of biometric parameters to provide complete health insights:
+
+### Metabolic Health
+- **Glucose Levels** (mg/dL) - Detects hypoglycemia, prediabetes, and diabetes risk
+- **Body Mass Index (BMI)** - Calculated from height and weight to assess healthy weight ranges
+
+### Cardiovascular Health
+- **Blood Pressure** (Systolic/Diastolic in mmHg) - Monitors for hypertension stages 1-2 and crisis situations
+- **Heart Rate** (beats/min) - Detects tachycardia and bradycardia
+- **Oxygen Saturation (SpO₂)** (%) - Identifies hypoxemia and respiratory issues
+
+### Vital Signs
+- **Body Temperature** (°C) - Detects fever, hypothermia, and infection risks
+- **Respiratory Rate** (breaths/min) - Monitors for tachypnea and breathing abnormalities
+
+### Biometric Profile
+- **Age** (years) - Used for age-specific health assessments
+- **Height** (meters) - For BMI calculation and body composition analysis
+- **Weight** (kilograms) - Tracks weight changes and calculates BMI
+- **Blood Type** - Stores critical medical information for emergencies
+
+## Key Benefits
+
+### Evidence-Based Recommendations
+
+MediGuide provides health recommendations based on established medical ranges and guidelines:
+
+- **Glucose**: Normal (70-99), Prediabetes (100-125), Diabetes (>125)
+- **Blood Pressure**: Normal (&lt;120/80), Stage 1 (130-139/80-89), Stage 2 (≥140/90)
+- **SpO₂**: Normal (95-100%), Low (&lt;90%)
+- **Heart Rate**: Normal (60-100), Tachycardia (>100), Bradycardia (&lt;60)
+
+### Structured Health Plans
+
+When risk factors are detected, MediGuide automatically generates personalized health plans with:
+
+- **Specific timelines** (2-12 weeks depending on severity)
+- **Daily and weekly activities** with clear instructions
+- **Dietary recommendations** tailored to your condition
+- **Exercise protocols** appropriate for your health level
+- **Follow-up schedules** to track progress
+
+### Risk Classification
+
+All health findings are classified by severity level:
+
+<CodeGroup>
+```text Severity Levels
+BAJO (Low) - Minimal risk, monitoring recommended
+MEDIO (Medium) - Moderate risk, lifestyle changes advised
+ALTO (High) - Significant risk, medical consultation recommended
+CRÍTICO (Critical) - Emergency attention required immediately
+```
+</CodeGroup>
+
+<Warning>
+  **Medical Disclaimer**: MediGuide provides educational health information and does NOT replace professional medical advice. Always consult qualified healthcare providers for diagnosis and treatment decisions.
+</Warning>
+
+## How MediGuide Works
+
+MediGuide uses a simple four-step process:
+
+<Steps>
+  <Step title="Create Your Account">
+    Sign up securely with username, email, and password. Your data is protected and stored securely in our PostgreSQL database.
+  </Step>
+  
+  <Step title="Enter Your Medical Data">
+    Complete the comprehensive health form with your current biometric measurements. All 11 parameters are tracked and stored with timestamps.
+  </Step>
+  
+  <Step title="Get Instant Analysis">
+    MediGuide immediately analyzes your data against medical thresholds and identifies any health risks or concerning patterns.
+  </Step>
+  
+  <Step title="Follow Your Personalized Plan">
+    Access custom health plans with specific recommendations, timelines, and activities designed for your unique health profile.
+  </Step>
+</Steps>
+
+## Technology Stack
+
+MediGuide is built with modern web technologies:
+
+- **Frontend**: React 19 with Vite for fast, responsive UI
+- **Backend**: Express.js Node.js server on port 3001
+- **Database**: PostgreSQL with automated schema initialization
+- **Authentication**: Secure user sessions with password recovery via email codes
+- **Data Storage**: Relational database with user and medical_records tables
+
+## Get Started
+
+Ready to begin your health monitoring journey?
+
+<CardGroup cols={2}>
+  <Card title="Quick Start Guide" icon="rocket" href="/quickstart">
+    Get your first health check done in 5 minutes
+  </Card>
+  
+  <Card title="API Reference" icon="code" href="/api/overview">
+    Explore the complete API documentation
+  </Card>
+</CardGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Authentication Features" icon="lock" href="/features/authentication">
+    Learn about signup, login, and password recovery
+  </Card>
+  
+  <Card title="Medical Tracking" icon="notes-medical" href="/features/medical-tracking">
+    Understand all trackable health parameters
+  </Card>
+  
+  <Card title="Health Analysis" icon="chart-line" href="/features/health-analysis">
+    See how MediGuide analyzes your data
+  </Card>
+  
+  <Card title="Personalized Plans" icon="clipboard-list" href="/features/personalized-plans">
+    Discover custom health plan features
+  </Card>
+</CardGroup>

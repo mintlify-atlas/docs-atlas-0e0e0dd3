@@ -1,0 +1,79 @@
+---
+title: Verify Reset Code
+description: Verify a password reset code before allowing password change
+---
+
+## Endpoint
+
+`POST /api/users/verify-reset-code`
+
+## Request Body
+
+<ParamField path="email" type="string" required>
+  The email address associated with the account.
+</ParamField>
+
+<ParamField path="resetCode" type="string" required>
+  The 6-digit reset code received from the forgot-password endpoint.
+</ParamField>
+
+## Response
+
+Success response (200 OK)
+
+<ResponseField name="message" type="string">
+  Confirmation message: "Reset code verified"
+</ResponseField>
+
+<ResponseField name="userId" type="integer">
+  The unique ID of the user whose reset code was verified
+</ResponseField>
+
+## Example Request
+
+```bash
+curl -X POST https://api.mediguide.com/api/users/verify-reset-code \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "john@example.com",
+    "resetCode": "123456"
+  }'
+```
+
+## Example Response
+
+```json
+{
+  "message": "Reset code verified",
+  "userId": 42
+}
+```
+
+## Error Responses
+
+### 401 Unauthorized - Invalid Reset Code
+```json
+{
+  "error": "Código de recuperación inválido"
+}
+```
+
+This error is returned when:
+- The email and reset code combination does not exist
+- The reset code does not match the one stored for the email
+
+### 401 Unauthorized - Expired Reset Code
+```json
+{
+  "error": "El código de recuperación ha expirado"
+}
+```
+
+This error is returned when the reset code has expired (more than 30 minutes old).
+
+### 500 Internal Server Error
+```json
+{
+  "error": "Error message details"
+}
+```

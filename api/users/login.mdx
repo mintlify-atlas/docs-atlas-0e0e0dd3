@@ -1,0 +1,75 @@
+---
+title: User Login
+description: Authenticate a user and start a session in the MediGuide platform
+---
+
+## Endpoint
+
+`POST /api/users/login`
+
+## Request Body
+
+<ParamField path="username" type="string" required>
+  The username of the account to authenticate.
+</ParamField>
+
+<ParamField path="password" type="string" required>
+  The account password for authentication.
+</ParamField>
+
+## Response
+
+Success response (200 OK)
+
+<ResponseField name="message" type="string">
+  Confirmation message: "Login successful"
+</ResponseField>
+
+<ResponseField name="userId" type="integer">
+  The unique ID of the authenticated user
+</ResponseField>
+
+<ResponseField name="username" type="string">
+  The username of the authenticated user
+</ResponseField>
+
+## Example Request
+
+```bash
+curl -X POST https://api.mediguide.com/api/users/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "john_doe",
+    "password": "securePassword123"
+  }'
+```
+
+## Example Response
+
+```json
+{
+  "message": "Login successful",
+  "userId": 42,
+  "username": "john_doe"
+}
+```
+
+## Error Responses
+
+### 401 Unauthorized - Invalid Credentials
+```json
+{
+  "error": "Usuario o contraseña incorrectos"
+}
+```
+
+This error is returned when:
+- The username does not exist in the system
+- The password does not match the stored password
+
+### 500 Internal Server Error
+```json
+{
+  "error": "Error message details"
+}
+```
