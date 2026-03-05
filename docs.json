@@ -50,7 +50,9 @@
               "guides/creating-account",
               "guides/entering-medical-data",
               "guides/understanding-results",
-              "guides/password-recovery"
+              "guides/password-recovery",
+              "guides/legal-compliance",
+              "guides/contact-support"
             ]
           }
         ]

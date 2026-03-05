@@ -469,3 +469,129 @@ const apiUrl = 'http://localhost:3001';
 <Info>
 Ensure the backend server is running on port 3001 before attempting authentication operations.
 </Info>
+
+## Session Management
+
+### User Session Storage
+
+After successful authentication, user session data is stored in the browser's localStorage:
+
+```javascript
+// Stored after login/signup
+localStorage.setItem('userId', data.userId);
+localStorage.setItem('username', data.username);
+
+// Retrieved on app load
+const userId = localStorage.getItem('userId');
+const username = localStorage.getItem('username');
+```
+
+### Session Persistence
+
+The application checks for existing sessions on page load:
+
+```javascript
+useEffect(() => {
+  const userId = localStorage.getItem('userId');
+  if (userId) {
+    setIsAuthenticated(true);
+  }
+}, []);
+```
+
+This allows users to remain logged in across browser sessions until they explicitly log out.
+
+## Logout Functionality
+
+### User Interface
+
+The logout button appears in the application header after successful authentication:
+
+**Location**: Top-right corner of the header  
+**Label**: "Cerrar Sesión" (Close Session)  
+**Visibility**: Only shown when user is authenticated
+
+### Logout Implementation
+
+The logout process from `header.jsx:4-27`:
+
+```javascript header.jsx
+function HeaderContent({ onLogout }){
+    const username = localStorage.getItem('username');
+    
+    return(
+    <header>
+        <img src={logo} alt='Mediguide Logo'></img>
+        <p>Donde la salud del usuario es nuestra prioridad</p>
+        {username && (
+            <div className="header-user-section">
+                <span className="welcome-text">Bienvenido, {username}</span>
+                <button 
+                    type='button' 
+                    onClick={onLogout}
+                    className="logout-button"
+                >
+                    Cerrar Sesión
+                </button>
+            </div>
+        )}
+    </header>
+    )
+}
+```
+
+### Logout Handler
+
+From `App.jsx:28-32`:
+
+```javascript App.jsx
+const handleLogout = () => {
+  localStorage.removeItem('userId');
+  localStorage.removeItem('username');
+  setIsAuthenticated(false);
+};
+```
+
+### Logout Process
+
+<Steps>
+  <Step title="Click Logout Button">
+    User clicks **Cerrar Sesión** button in the header
+  </Step>
+  <Step title="Clear Session Data">
+    Application removes userId and username from localStorage
+  </Step>
+  <Step title="Update Authentication State">
+    Authentication state is set to false
+  </Step>
+  <Step title="Redirect to Login">
+    User is automatically redirected to the login/signup page
+  </Step>
+</Steps>
+
+### Security Considerations
+
+<Note>
+  **Session Timeout**: The current implementation does not include automatic session expiration. Sessions persist until the user explicitly logs out or clears browser data.
+</Note>
+
+<Warning>
+  **Shared Devices**: Always log out when using shared or public devices to protect your medical data. Simply closing the browser does NOT log you out.
+</Warning>
+
+## Related Features
+
+<CardGroup cols={2}>
+  <Card title="Password Recovery" icon="key" href="/guides/password-recovery">
+    Reset your password if you forget it
+  </Card>
+  <Card title="Creating Account" icon="user-plus" href="/guides/creating-account">
+    Complete signup guide
+  </Card>
+  <Card title="Contact Support" icon="headset" href="/guides/contact-support">
+    Get help with account issues
+  </Card>
+  <Card title="API Authentication" icon="code" href="/api/authentication">
+    Developer authentication documentation
+  </Card>
+</CardGroup>
